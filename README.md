@@ -1,7 +1,7 @@
 Angular jStore
 ================
 
-The `angular-jstore` module provides a convenient wrapper for to storing data in HTML5 localStorage, in the client browser. 
+The `angular-jstore` module provides a convenient wrapper for to storing JSON objects in the client browser with HTML5 localStorage. 
 
 How to use angular jstore
 -----
@@ -22,8 +22,6 @@ var app = angular.module('myApp', ['angular-jstore']);
 - Setting a prefix for the session name (OPTIONAL)
 
 ```js
-var app = angular.module('myApp', ['angular-jstore']);
-
 // Jstore Provider
 app.config(['$jstoreProvider', function ($jstoreProvider) {
     $jstoreProvider.setPrefix('appDemo');
@@ -36,25 +34,25 @@ app.config(['$jstoreProvider', function ($jstoreProvider) {
 app.controller("DemoCtrl", ['$scope', '$jstore', function($scope, $jstore) {
 
 	// Session name
-	var SESSION_NAME = "SessionTest";
+	var SESSION_NAME = "YourSessionName";
 
 	// Add data in session localStorage
-	$jstore.set(SESSION_NAME, { year: "2015" });
+	$jstore.set(SESSION_NAME, { year: "2016" });
 
 	// Display the value in the console
 	console.log($jstore.get(SESSION_NAME).year);
 
 	// Change session data
-	$jstore.set(SESSION_NAME, { year: "2016" });
+	$jstore.set(SESSION_NAME, { year: "2017" });
 
 	// Display the value in the console
 	console.log($jstore.get(SESSION_NAME).year);
 
 	// Personal data
 	var personalData = {
-		"firstName": "Giovanni",
-		"lastName": "Ramos",
-		"age": "34",
+		"firstName": "John",
+		"lastName": "Doe",
+		"age": "35",
 	};
 
 	// Add more data in session
