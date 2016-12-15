@@ -1,0 +1,26 @@
+{
+  "name": "angular-jstore",
+  "version": "1.0.0",
+  "description": "AngularJS wrapper for storing JSON objects in the client browser with HTML5 localStorage.",
+  "main": "angular-jstore.js",
+  "author": {
+    "name": "Giovanni Ramos",
+    "email": "giovannilauro@gmail.com>"
+  },
+  "keywords": [
+    "AngularJS",
+    "JSON",
+    "storage",
+    "webstorage",
+    "localstorage"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/giovanniramos/angular-jstore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/giovanniramos/angular-jstore/issues"
+  },
+  "homepage": "https://github.com/giovanniramos/angular-jstore#readme"
+}
