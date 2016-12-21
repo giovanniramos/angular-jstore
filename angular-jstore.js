@@ -79,6 +79,17 @@
 
             return {
                 /**
+                 * @ngdoc property
+                 * @name $jstore#isSupported
+                 *
+                 * @description
+                 * Check browser support
+                 *
+                 * @return {Boolean} Returns true if Storage is supported.
+                 */
+                isSupported: _checkBrowserSupport(),
+
+                /**
                  * @ngdoc method
                  * @name $jstore#set
                  *

@@ -3,6 +3,13 @@
 The `angular-jstore` module provides a convenient wrapper for to storing JSON objects in the client browser with HTML5 localStorage. 
 
 
+## Install with package managers
+
+* Bower: bower install angular-jstore --save
+
+* npm: npm install angular-jstore --save
+
+
 ## How to use angular jstore
 
 * Add `angular` and `angular-jstore` to your code:
@@ -33,6 +40,13 @@ app.config(['$jstoreProvider', function ($jstoreProvider) {
 app.controller("DemoCtrl", ['$scope', '$jstore', function($scope, $jstore) {
 
     var SESSION_NAME = "YourSessionName";
+
+    // Check browser support for localStorage
+    if (!$jstore.isSupported) {
+        alert('Your browser does not support HTML5 Web Storage. Please upgrade to a modern browser.');
+        angular.element('body').empty();
+        return;
+    }
 
     // Add data in session localStorage
     $jstore.set(SESSION_NAME, { year: "2016" });
