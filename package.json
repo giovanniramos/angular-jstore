@@ -1,6 +1,6 @@
 {
   "name": "angular-jstore",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "AngularJS wrapper for storing JSON objects in the client browser with HTML5 localStorage.",
   "main": "angular-jstore.js",
   "author": "Giovanni Ramos <giovannilauro@gmail.com>",
