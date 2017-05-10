@@ -1,5 +1,5 @@
 /*!
- * angular-jstore.js [v1.1.0]
+ * angular-jstore.js [v1.1.1]
  * https://github.com/giovanniramos/angular-jstore
  *
  * Copyright (c) 2017 Giovanni Ramos
