@@ -2,7 +2,7 @@
  * angular-jstore.js [v1.1.0]
  * https://github.com/giovanniramos/angular-jstore
  *
- * Copyright (c) 2016 Giovanni Ramos
+ * Copyright (c) 2017 Giovanni Ramos
  * Licensed under the MIT license:
  *   http://opensource.org/licenses/MIT
  */
