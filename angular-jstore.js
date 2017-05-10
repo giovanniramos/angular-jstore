@@ -65,7 +65,7 @@
          *   }]);
          * ```
          */
-        this.$get = function() {
+        this.$get = [function() {
 
             // Check browser support
             var _checkBrowserSupport = function(obj, src) {
@@ -73,8 +73,8 @@
             };
 
             // Reduce prefix
-            var _reducePrefix = function(key) {
-                return key.replace(new RegExp('(' + _prefix + '){2,}', 'g'), _prefix);
+            var _reducePrefix = function(sId) {
+                return sId.replace(new RegExp('(' + _prefix + '){2,}', 'g'), _prefix);
             };
 
             return {
@@ -94,27 +94,28 @@
                  * @name $jstore#set
                  *
                  * @description
-                 * Add session localStorage
+                 * Stores a serialized object of key-value pair in session of the localStorage.
                  *
-                 * @param {string} key Id for the `value`.
+                 * @param {string} sId Id name of the session to be used for store.
                  * @param {Object} val JSON value to be stored.
                  */
-                set: function(key, val) {
+                set: function(sId, val) {
                     _checkBrowserSupport();
 
-                    if (typeof key !== 'string')
-                        throw new TypeError('[angular-jstore] - $jstore.set() expects a String but got a `' + (typeof key) + '` as a first parameter.');
+                    if (typeof sId !== 'string') {
+                        throw new TypeError('[angular-jstore] - $jstore.set() expects a String but got a `' + (typeof sId) + '` as a first parameter.');
+                    }
 
-                    if (typeof val === 'string')
+                    if (typeof val === 'string') {
                         throw new TypeError('[angular-jstore] - $jstore.set() expects a JSON object instead of a string as a second parameter.');
-                    else
-                        if (typeof val !== 'object')
-                            throw new TypeError('[angular-jstore] - $jstore.set() expects a JSON object with second argument.');
+                    } else if (typeof val !== 'object') {
+                        throw new TypeError('[angular-jstore] - $jstore.set() expects a JSON object as the second argument.');
+                    }
 
-                    var key = _prefix + key;
-                    var obj = this.get(key);
+                    var sId = _prefix + sId;
+                    var obj = this.get(sId);
 
-                    return localStorage.setItem(key, angular.toJson(obj == null ? val : angular.merge(obj, val)));
+                    return localStorage.setItem(sId, angular.toJson(obj == null ? val : angular.merge(obj, val)));
                 },
 
                 /**
@@ -122,21 +123,55 @@
                  * @name $jstore#get
                  *
                  * @description
-                 * Get session localStorage
+                 * Gets a deserialized key-value pair object from the localStorage.
                  *
-                 * @param {string} key Id to use for lookup.
+                 * @param {string} sId Id name of the session to use for lookup.
                  * @returns {Object} Returns the deserialized value.
                  */
-                get: function(key) {
+                get: function(sId) {
                     _checkBrowserSupport();
 
-                    if (typeof key !== 'string')
+                    if (typeof sId !== 'string') {
                         throw new TypeError('[angular-jstore] - $jstore.get() expects a String.');
+                    }
 
-                    var key = _reducePrefix(_prefix + key);
-                    var val = localStorage.getItem(key);
+                    var sId = _reducePrefix(_prefix + sId);
+                    var val = localStorage.getItem(sId);
 
                     return (val !== null) ? angular.fromJson(val) : null;
+                },
+
+                /**
+                 * @ngdoc method
+                 * @name $jstore#del
+                 *
+                 * @description
+                 * Removes session values by sId
+                 *
+                 * @param {string} sId Id name of the session to use for lookup.
+                 * @param {string} key [, keyN] Name of the keys to be deleted from the session.
+                 */
+                del: function(sId) {
+                    _checkBrowserSupport();
+
+                    if (typeof sId !== 'string') {
+                        throw new TypeError('[angular-jstore] - $jstore.del() expects a String.');
+                    }
+
+                    var sId = _reducePrefix(_prefix + sId);
+                    var obj = this.get(sId);
+
+                    if (obj == null) {
+                        return;
+                    }
+
+                    if (arguments.length) {
+                        for (var i = 1; i < arguments.length; i++) {
+                            delete obj[arguments[i]];
+                        }
+                    }
+
+                    localStorage.setItem(sId, angular.toJson(obj));
                 },
 
                 /**
@@ -146,16 +181,17 @@
                  * @description
                  * Checks the a session exists in localStorage.
                  *
-                 * @param {string} key Id to use for lookup.
-                 * @returns {Object} Deserialized value.
+                 * @param {string} sId Id name of the session to use for lookup.
+                 * @returns {Boolean} Returns true if the session exists.
                  */
-                has: function(key) {
+                has: function(sId) {
                     _checkBrowserSupport();
 
-                    if (typeof key !== 'string')
+                    if (typeof sId !== 'string') {
                         throw new TypeError('[angular-jstore] - $jstore.has() expects a String.');
+                    }
 
-                    return this.get(key) !== null ? true : false;
+                    return this.get(sId) !== null ? true : false;
                 },
 
                 /**
@@ -173,9 +209,11 @@
                     var count = 0;
                     var store = localStorage;
                     var storeSize = store.length;
-                    for (var i = 0; i < storeSize; i++)
-                        if (store.key(i).indexOf(_prefix) === 0)
+                    for (var i = 0; i < storeSize; i++) {
+                        if (store.key(i).indexOf(_prefix) === 0) {
                             count++;
+                        }
+                    }
 
                     return count;
                 },
@@ -198,9 +236,10 @@
                     var store = localStorage;
                     var storeSize = store.length;
                     for (var i = 0; i < storeSize; i++) {
-                        var key = localStorage.key(i);
-                        if (store.key(i).indexOf(_prefix) === 0)
-                            callback(key, this.get(key))
+                        var sId = localStorage.key(i);
+                        if (store.key(i).indexOf(_prefix) === 0) {
+                            callback(sId, this.get(sId))
+                        }
                     }
                 },
 
@@ -209,18 +248,19 @@
                  * @name $jstore#remove
                  *
                  * @description
-                 * Remove the session.
+                 * Remove the session created in localStorage.
                  *
-                 * @param {string} key Id of the key-value pair to delete.
+                 * @param {string} sId Id name of the session to be removed.
                  */
-                remove: function(key) {
+                remove: function(sId) {
                     _checkBrowserSupport();
 
-                    if (typeof key !== 'string')
+                    if (typeof sId !== 'string') {
                         throw new TypeError('[angular-jstore] - $jstore.remove() expects a String.');
+                    }
 
-                    var key = _reducePrefix(_prefix + key);
-                    localStorage.removeItem(key);
+                    var sId = _reducePrefix(_prefix + sId);
+                    localStorage.removeItem(sId);
                 },
 
                 /**
@@ -236,7 +276,7 @@
                     localStorage.clear();
                 }
             };
-        };
+        }];
 
     });
 

@@ -5,9 +5,14 @@ The `angular-jstore` module provides a convenient wrapper for to storing JSON ob
 
 ## Install with package managers
 
-* Bower: bower install angular-jstore --save
-
-* npm: npm install angular-jstore --save
+#### via bower:
+```
+$ bower install angular-jstore --save
+```
+#### via npm:
+```
+$ npm install angular-jstore --save
+```
 
 
 ## How to use angular jstore
@@ -37,9 +42,9 @@ app.config(['$jstoreProvider', function ($jstoreProvider) {
 * To test see the example below:
 
 ```js
-app.controller("DemoCtrl", ['$scope', '$jstore', function($scope, $jstore) {
+app.controller('DemoCtrl', ['$scope', '$jstore', function($scope, $jstore) {
 
-    var SESSION_NAME = "YourSessionName";
+    var SESSION_NAME = 'YourSessionName';
 
     // Check browser support for localStorage
     if (!$jstore.isSupported) {
@@ -49,29 +54,34 @@ app.controller("DemoCtrl", ['$scope', '$jstore', function($scope, $jstore) {
     }
 
     // Add data in session localStorage
-    $jstore.set(SESSION_NAME, { year: "2016" });
+    $jstore.set(SESSION_NAME, { year: '2016' });
 
     // Display the value in the console
     console.log($jstore.get(SESSION_NAME).year);
 
     // Change session data
-    $jstore.set(SESSION_NAME, { year: "2017" });
+    $jstore.set(SESSION_NAME, { year: '2017' });
 
     // Display the value in the console
     console.log($jstore.get(SESSION_NAME).year);
 
     // Personal data
     var personalData = {
-        "firstName": "John",
-        "lastName": "Doe",
-        "age": "35",
+        'firstName': 'John',
+        'lastName': 'Doe',
+        'age': '35',
+        'gender': 'male',
+        'profession': 'Programmer'
     };
 
     // Add more data in session
     $jstore.set(SESSION_NAME, personalData);
 
     // Add Array data in session
-    $jstore.set(SESSION_NAME, { magazine: [ "FORBES", "VOGUE" ] });
+    $jstore.set(SESSION_NAME, { magazine: ['FORBES', 'VOGUE'] });
+
+    // Delete one or more items in the session
+    $jstore.del(SESSION_NAME, 'profession', 'gender');
 
     // Check if you have data in session
     var hasData = $jstore.has(SESSION_NAME);
@@ -87,8 +97,8 @@ app.controller("DemoCtrl", ['$scope', '$jstore', function($scope, $jstore) {
     var count = $jstore.count();
 
     // Displays data for all created sessions
-    $jstore.each(function(k, v) {
-        console.log(k,':',v);
+    $jstore.each(function (k, v) {
+        console.log(k, ':', v);
     });
 
     // Clears data from a specific session in localStorage
