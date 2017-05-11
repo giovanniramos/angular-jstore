@@ -1,5 +1,5 @@
 /*!
- * angular-jstore.js [v1.1.1]
+ * angular-jstore.js [v1.1.2]
  * https://github.com/giovanniramos/angular-jstore
  *
  * Copyright (c) 2017 Giovanni Ramos
@@ -146,7 +146,7 @@
                  * @name $jstore#del
                  *
                  * @description
-                 * Removes session values by sId
+                 * Deletes from the session the pair-value by the keys
                  *
                  * @param {string} sId Id name of the session to use for lookup.
                  * @param {string} key [, keyN] Name of the keys to be deleted from the session.
@@ -160,18 +160,54 @@
 
                     var sId = _reducePrefix(_prefix + sId);
                     var obj = this.get(sId);
-
-                    if (obj == null) {
+                    if (obj == null)
                         return;
-                    }
 
-                    if (arguments.length) {
-                        for (var i = 1; i < arguments.length; i++) {
-                            delete obj[arguments[i]];
+                    var args = arguments;
+                    if (args.length) {
+                        for (var i = 1; i < args.length; i++) {
+                            delete obj[args[i]];
                         }
                     }
 
                     localStorage.setItem(sId, angular.toJson(obj));
+                },
+
+                /**
+                 * @ngdoc method
+                 * @name $jstore#omit
+                 *
+                 * @description
+                 * Deletes from session all pairs-value except for the keys
+                 *
+                 * @param {string} sId Id name of the session to use for lookup.
+                 * @param {string} key [, keyN] Name of the keys to be deleted from the session.
+                 */
+                omit: function(sId) {
+                    _checkBrowserSupport();
+
+                    if (typeof sId !== 'string') {
+                        throw new TypeError('[angular-jstore] - $jstore.omit() expects a String.');
+                    }
+
+                    var sId = _reducePrefix(_prefix + sId);
+                    var obj = this.get(sId);
+                    if (obj == null) 
+                        return;
+
+                    var nObj = {};
+                    var args = arguments;
+                    if (args.length) {
+                        for (var i = 1; i < args.length; i++) {
+                            $.each(obj, function (key, val) {
+                                if (key == args[i]) {
+                                    nObj[key] = val;
+                                }
+                            });
+                        }
+                    }
+
+                    localStorage.setItem(sId, angular.toJson(nObj));
                 },
 
                 /**

@@ -80,8 +80,11 @@ app.controller('DemoCtrl', ['$scope', '$jstore', function($scope, $jstore) {
     // Add Array data in session
     $jstore.set(SESSION_NAME, { magazine: ['FORBES', 'VOGUE'] });
 
-    // Delete one or more items in the session
+    // Deletes from the session the pair-value by the keys
     $jstore.del(SESSION_NAME, 'profession', 'gender');
+
+    // Deletes from session all pairs-value except for the keys
+    $jstore.omit(SESSION_NAME, 'firstName', 'year', 'magazine');
 
     // Check if you have data in session
     var hasData = $jstore.has(SESSION_NAME);
