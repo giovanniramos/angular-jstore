@@ -1,11 +1,3 @@
-/*!
- * angular-jstore.js [v1.1.2]
- * https://github.com/giovanniramos/angular-jstore
- *
- * Copyright (c) 2017 Giovanni Ramos
- * Licensed under the MIT license:
- *   http://opensource.org/licenses/MIT
- */
 ; (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD module

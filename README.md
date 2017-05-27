@@ -17,11 +17,11 @@ $ npm install angular-jstore --save
 
 ## How to use angular jstore
 
-* Add `angular` and `angular-jstore` to your code:
+* Add `angular.min.js` and `angular-jstore.min.js`(from the [dist](https://github.com/giovanniramos/angular-jstore/tree/master/dist) directory) to your code:
 
 ```html
-<script src="angular.js"></script>
-<script src="angular-jstore.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="angular-jstore.min.js"></script>
 ```
 
 * Add a dependency to the `angular-jstore` module in your application.
@@ -116,7 +116,7 @@ app.controller('DemoCtrl', ['$scope', '$jstore', function($scope, $jstore) {
 
 ### Console Output
 
-![Console](other/console.png)
+![Console](http://i.imgur.com/p7flSIv.png)
 
 
 ## License
