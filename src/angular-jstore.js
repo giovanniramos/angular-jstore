@@ -17,7 +17,7 @@
      * @ngdoc overview
      * @name angular-jstore
      * @description
-     * The `angular-jstore` module provides a convenient wrapper for to storing data in HTML5 localStorage, in the client browser. 
+     * The `angular-jstore` module provides a convenient wrapper for to storing data in HTML5 localStorage, in the client browser.
      */
     var jstore = angular.module('angular-jstore', []);
 
@@ -30,7 +30,7 @@
         var _prefix = 'jstoreApp-';
 
         // Setter for the prefix
-        // e.g. $jstoreProvider.setPrefix('yourAppName');        
+        // e.g. $jstoreProvider.setPrefix('yourAppName');
         this.setPrefix = function(prefix) {
             if (typeof prefix !== 'string')
                 throw new TypeError('[angular-jstore] - $jstoreProvider.setPrefix() expects a String.');
@@ -39,10 +39,11 @@
             return this;
         };
 
+
         /**
          * @ngdoc service
          * @name $jstore
-         * 
+         *
          * @example
          *
          * ```js
@@ -65,8 +66,8 @@
             };
 
             // Reduce prefix
-            var _reducePrefix = function(sId) {
-                return sId.replace(new RegExp('(' + _prefix + '){2,}', 'g'), _prefix);
+            var _reducePrefix = function(id) {
+                return id.replace(new RegExp('(' + _prefix + '){2,}', 'g'), _prefix);
             };
 
             return {
@@ -104,10 +105,10 @@
                         throw new TypeError('[angular-jstore] - $jstore.set() expects a JSON object as the second argument.');
                     }
 
-                    var sId = _prefix + sId;
-                    var obj = this.get(sId);
+                    var pid = _prefix + sId;
+                    var obj = this.get(pid);
 
-                    return localStorage.setItem(sId, angular.toJson(obj == null ? val : angular.merge(obj, val)));
+                    return localStorage.setItem(pid, angular.toJson(obj == null ? val : angular.merge(obj, val)));
                 },
 
                 /**
@@ -127,8 +128,8 @@
                         throw new TypeError('[angular-jstore] - $jstore.get() expects a String.');
                     }
 
-                    var sId = _reducePrefix(_prefix + sId);
-                    var val = localStorage.getItem(sId);
+                    var pid = _reducePrefix(_prefix + sId);
+                    var val = localStorage.getItem(pid);
 
                     return (val !== null) ? angular.fromJson(val) : null;
                 },
@@ -150,8 +151,8 @@
                         throw new TypeError('[angular-jstore] - $jstore.del() expects a String.');
                     }
 
-                    var sId = _reducePrefix(_prefix + sId);
-                    var obj = this.get(sId);
+                    var pid = _reducePrefix(_prefix + sId);
+                    var obj = this.get(pid);
                     if (obj == null)
                         return;
 
@@ -162,7 +163,7 @@
                         }
                     }
 
-                    localStorage.setItem(sId, angular.toJson(obj));
+                    localStorage.setItem(pid, angular.toJson(obj));
                 },
 
                 /**
@@ -182,24 +183,27 @@
                         throw new TypeError('[angular-jstore] - $jstore.omit() expects a String.');
                     }
 
-                    var sId = _reducePrefix(_prefix + sId);
-                    var obj = this.get(sId);
-                    if (obj == null) 
+                    var pid = _reducePrefix(_prefix + sId);
+                    var obj = this.get(pid);
+                    if (obj == null)
                         return;
 
                     var nObj = {};
                     var args = arguments;
                     if (args.length) {
+                        var argsSize = args.length;
                         for (var i = 1; i < args.length; i++) {
-                            $.each(obj, function (key, val) {
-                                if (key == args[i]) {
-                                    nObj[key] = val;
+                            for (var key in obj) {
+                                if (obj.hasOwnProperty(key)) {
+                                    if (key == args[i]) {
+                                        nObj[key] = obj[key];
+                                    }
                                 }
-                            });
+                            }
                         }
                     }
 
-                    localStorage.setItem(sId, angular.toJson(nObj));
+                    localStorage.setItem(pid, angular.toJson(nObj));
                 },
 
                 /**
@@ -253,7 +257,7 @@
                  * @description
                  * Iterate over all sessions created in localStorage.
                  *
-                 * @param {Function} callback The callback function. 
+                 * @param {Function} callback The callback function.
                  */
                 each: function(callback) {
                     _checkBrowserSupport();
@@ -264,9 +268,9 @@
                     var store = localStorage;
                     var storeSize = store.length;
                     for (var i = 0; i < storeSize; i++) {
-                        var sId = localStorage.key(i);
+                        var id = localStorage.key(i);
                         if (store.key(i).indexOf(_prefix) === 0) {
-                            callback(sId, this.get(sId))
+                            callback(id, this.get(id));
                         }
                     }
                 },
@@ -287,8 +291,8 @@
                         throw new TypeError('[angular-jstore] - $jstore.remove() expects a String.');
                     }
 
-                    var sId = _reducePrefix(_prefix + sId);
-                    localStorage.removeItem(sId);
+                    var pid = _reducePrefix(_prefix + sId);
+                    localStorage.removeItem(pid);
                 },
 
                 /**
