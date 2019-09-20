@@ -26,14 +26,15 @@
      * @name angular-jstore.$jstore
      * */
     jstore.provider('$jstore', function $jstoreProvider() {
+
         // Default prefix
         var _prefix = 'jstoreApp-';
 
         // Setter for the prefix
-        // e.g. $jstoreProvider.setPrefix('yourAppName');
+        // e.g. $jstoreProvider.setPrefix('myAppName');
         this.setPrefix = function(prefix) {
             if (typeof prefix !== 'string')
-                throw new TypeError('[angular-jstore] - $jstoreProvider.setPrefix() expects a String.');
+                throw new TypeError('$jstoreProvider.setPrefix() expects a String.');
 
             _prefix = prefix;
             return this;
@@ -50,7 +51,7 @@
          * angular.module('appExample', ['angular-jstore'])
          *   .controller('ExampleController', ['$jstore', function($jstore) {
          *     // Session name
-         *     var SESSION_NAME = "YourSessionName";
+         *     var SESSION_NAME = "MySessionName";
          *     // Add data in session localStorage
          *     $jstore.set(SESSION_NAME, { year: "2017" });
          *     // Recover data from session
@@ -61,7 +62,7 @@
         this.$get = [function() {
 
             // Check browser support
-            var _checkBrowserSupport = function(obj, src) {
+            var _checkBrowserSupport = function() {
                 return (typeof (Storage) !== "undefined") ? true : false;
             };
 
@@ -93,16 +94,14 @@
                  * @param {Object} val JSON value to be stored.
                  */
                 set: function(sId, val) {
-                    _checkBrowserSupport();
-
                     if (typeof sId !== 'string') {
-                        throw new TypeError('[angular-jstore] - $jstore.set() expects a String but got a `' + (typeof sId) + '` as a first parameter.');
+                        throw new TypeError('$jstore.set() expects a String but got a `' + (typeof sId) + '` as a first parameter.');
                     }
 
                     if (typeof val === 'string') {
-                        throw new TypeError('[angular-jstore] - $jstore.set() expects a JSON object instead of a string as a second parameter.');
+                        throw new TypeError('$jstore.set() expects a JSON object instead of a string as a second parameter.');
                     } else if (typeof val !== 'object') {
-                        throw new TypeError('[angular-jstore] - $jstore.set() expects a JSON object as the second argument.');
+                        throw new TypeError('$jstore.set() expects a JSON object as the second argument.');
                     }
 
                     var pid = _prefix + sId;
@@ -122,10 +121,8 @@
                  * @returns {Object} Returns the deserialized value.
                  */
                 get: function(sId) {
-                    _checkBrowserSupport();
-
                     if (typeof sId !== 'string') {
-                        throw new TypeError('[angular-jstore] - $jstore.get() expects a String.');
+                        throw new TypeError('$jstore.get() expects a String.');
                     }
 
                     var pid = _reducePrefix(_prefix + sId);
@@ -145,10 +142,8 @@
                  * @param {string} key [, keyN] Name of the keys to be deleted from the session.
                  */
                 del: function(sId) {
-                    _checkBrowserSupport();
-
                     if (typeof sId !== 'string') {
-                        throw new TypeError('[angular-jstore] - $jstore.del() expects a String.');
+                        throw new TypeError('$jstore.del() expects a String.');
                     }
 
                     var pid = _reducePrefix(_prefix + sId);
@@ -177,10 +172,8 @@
                  * @param {string} key [, keyN] Name of the keys to be deleted from the session.
                  */
                 omit: function(sId) {
-                    _checkBrowserSupport();
-
                     if (typeof sId !== 'string') {
-                        throw new TypeError('[angular-jstore] - $jstore.omit() expects a String.');
+                        throw new TypeError('$jstore.omit() expects a String.');
                     }
 
                     var pid = _reducePrefix(_prefix + sId);
@@ -191,7 +184,6 @@
                     var nObj = {};
                     var args = arguments;
                     if (args.length) {
-                        var argsSize = args.length;
                         for (var i = 1; i < args.length; i++) {
                             for (var key in obj) {
                                 if (obj.hasOwnProperty(key)) {
@@ -217,10 +209,8 @@
                  * @returns {Boolean} Returns true if the session exists.
                  */
                 has: function(sId) {
-                    _checkBrowserSupport();
-
                     if (typeof sId !== 'string') {
-                        throw new TypeError('[angular-jstore] - $jstore.has() expects a String.');
+                        throw new TypeError('$jstore.has() expects a String.');
                     }
 
                     return this.get(sId) !== null ? true : false;
@@ -236,8 +226,6 @@
                  * @returns {number} Total of elements in localStorage.
                  */
                 count: function() {
-                    _checkBrowserSupport();
-
                     var count = 0;
                     var store = localStorage;
                     var storeSize = store.length;
@@ -260,10 +248,8 @@
                  * @param {Function} callback The callback function.
                  */
                 each: function(callback) {
-                    _checkBrowserSupport();
-
                     if (typeof callback !== 'function')
-                        throw new TypeError('[angular-jstore] - $jstore.each() expects a Function with callback.');
+                        throw new TypeError('$jstore.each() expects a Function with callback.');
 
                     var store = localStorage;
                     var storeSize = store.length;
@@ -285,10 +271,8 @@
                  * @param {string} sId Id name of the session to be removed.
                  */
                 remove: function(sId) {
-                    _checkBrowserSupport();
-
                     if (typeof sId !== 'string') {
-                        throw new TypeError('[angular-jstore] - $jstore.remove() expects a String.');
+                        throw new TypeError('$jstore.remove() expects a String.');
                     }
 
                     var pid = _reducePrefix(_prefix + sId);
@@ -303,8 +287,6 @@
                  * Clear all sessions in localStorage.
                  */
                 clear: function() {
-                    _checkBrowserSupport();
-
                     localStorage.clear();
                 }
             };
