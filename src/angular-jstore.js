@@ -176,7 +176,8 @@
 
                     var args = arguments;
                     if (args.length) {
-                        for (var i = 1; i < args.length; i++) {
+                        var argsLength = args.length;
+                        for (var i = 1; i < argsLength; i++) {
                             delete obj[args[i]];
                         }
                     }
@@ -207,7 +208,8 @@
                     var nObj = {};
                     var args = arguments;
                     if (args.length) {
-                        for (var i = 1; i < args.length; i++) {
+                        var argsLength = args.length;
+                        for (var i = 1; i < argsLength; i++) {
                             for (var key in obj) {
                                 if (obj.hasOwnProperty(key)) {
                                     if (key == args[i]) {
@@ -251,8 +253,8 @@
                 count: function() {
                     var count = 0;
                     var store = localStorage;
-                    var storeSize = store.length;
-                    for (var i = 0; i < storeSize; i++) {
+                    var storeLength = store.length;
+                    for (var i = 0; i < storeLength; i++) {
                         if (store.key(i).indexOf(_prefix) === 0) {
                             count++;
                         }
@@ -275,8 +277,8 @@
                         throw new TypeError('$jstore.each() expects a Function with callback.');
 
                     var store = localStorage;
-                    var storeSize = store.length;
-                    for (var i = 0; i < storeSize; i++) {
+                    var storeLength = store.length;
+                    for (var i = 0; i < storeLength; i++) {
                         var id = localStorage.key(i);
                         if (store.key(i).indexOf(_prefix) === 0) {
                             callback(id, this.get(id));
@@ -321,16 +323,16 @@
                  */
                 fired: function(evt) {
                     angular.forEach(_channel, function(v, k) {
-                        if (evt.newValue == _channel[k][0]) {
+                        if (v[0] == evt.newValue) {
                             if (_debug) {
-                                console.log(' fire >>', _channel[k][0]);
+                                console.log(' fire >>', v[0]);
                             }
 
                             if (_tabStatus) {
                                 top.document.title = top.document.title.replace(/\(inactive\)/,'') + ' (inactive)';
                             }
 
-                            _channel[k][1](evt);
+                            v[1](evt);
                         }
                     });
                 },
@@ -363,6 +365,54 @@
                     } else if (window.attachEvent) {
                         window.attachEvent('onstorage', this.fired);
                     }
+                },
+
+                /**
+                 * @ngdoc method
+                 * @name $jstore#check
+                 *
+                 * @description
+                 * Checks if a channel trigger command still exists.
+                 */
+                check: function(cmd) {
+                    if (typeof cmd !== 'string') {
+                        throw new TypeError('$jstore.check() expects a String but got a `' + (typeof cmd) + '` as a parameter.');
+                    }
+
+                    if (_debug) {
+                        console.log('check >>', cmd);
+                    }
+
+                    var active = false;
+
+                    _channel.filter(function (v) {
+                        if (v[0] == cmd) {
+                            active = true;
+                        }
+                    });
+
+                    return active;
+                },
+
+                /**
+                 * @ngdoc method
+                 * @name $jstore#close
+                 *
+                 * @description
+                 * Discards a channel listener command.
+                 */
+                close: function(cmd) {
+                    if (typeof cmd !== 'string') {
+                        throw new TypeError('$jstore.close() expects a String but got a `' + (typeof cmd) + '` as a parameter.');
+                    }
+
+                    if (_debug) {
+                        console.log('close >>', cmd);
+                    }
+
+                    _channel = _channel.filter(function (v) {
+                        return v[0] !== cmd;
+                    });
                 },
 
                 /**
