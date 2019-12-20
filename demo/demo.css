@@ -82,6 +82,9 @@ html {
     .mui-panel .mui-btn--danger {
         background-color: #f44336;
     }
+    .mui-panel .mui-btn--dark {
+        background-color: #545454;
+    }
 }
 
 

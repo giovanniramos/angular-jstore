@@ -66,6 +66,11 @@ app.controller('Demo2Ctrl', ['$scope', '$window', '$tools', '$jstore', function(
         btn.setAttribute('disabled', 'disabled');
 
         setTimeout(function() {
+            if (btn.classList.contains('mui-btn--success')) {
+                btn.classList.remove('mui-btn--success');
+                btn.classList.add('mui-btn--danger');
+            }
+
             btn.removeAttribute('disabled');
 
             $jstore.close('purchase');
@@ -78,13 +83,13 @@ app.controller('Demo2Ctrl', ['$scope', '$window', '$tools', '$jstore', function(
         var btn = document.querySelector('#btn-logonoff');
         if (btn.classList.contains('mui-btn--primary')) {
             btn.classList.remove('mui-btn--primary');
-            btn.classList.add('mui-btn--danger');
+            btn.classList.add('mui-btn--dark');
 
             btn.querySelector('span').innerHTML = 'Logoff';
 
             $tools.log('Logoff');
         } else {
-            btn.classList.remove('mui-btn--danger');
+            btn.classList.remove('mui-btn--dark');
             btn.classList.add('mui-btn--primary');
 
             btn.querySelector('span').innerHTML = 'Login';
