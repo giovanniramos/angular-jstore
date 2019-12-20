@@ -1,0 +1,102 @@
+﻿
+/* GENERAL */
+
+html,
+body,
+input,
+textarea,
+button {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+}
+
+html {
+    -webkit-tap-highlight-color: transparent;
+}
+
+#container {
+    min-height: 100%;
+}
+
+#container button {
+    min-width: 100px;
+}
+
+#container button.disabled,
+#container button:disabled,
+#container button[disabled] {
+    background: #ccc;
+    color: #fff;
+    cursor: not-allowed;
+    pointer-events: all !important;
+}
+
+
+#container section.console {
+    background: #fff;
+    border-top: 1px solid #a8a6a2;
+    border-bottom: 1px solid #a8a6a2;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: 1px solid #a8a6a2;
+    height: 185px;
+    line-height: 18px;
+    padding: 10px;
+    overflow: auto;
+}
+
+#container section.console code > p {
+    margin-bottom: 0;
+}
+
+
+
+/* MATERIAL-UI */
+
+@media all {
+    .mui-panel {
+        background: #fcfcfc;
+        border-radius: 3px;
+        margin-top: 20px;
+        margin-bottom: 0;
+    }
+
+    .mui-panel .mui-btn {
+        color: #fff;
+    }
+    .mui-panel .mui-btn--primary {
+        background-color: #3f51b5;
+    }
+    .mui-panel .mui-btn--success {
+        background-color: #28a745;
+    }
+    .mui-panel .mui-btn--info {
+        background-color: #03a9f4;
+    }
+    .mui-panel .mui-btn--warning {
+        background-color: #ff5722;
+    }
+    .mui-panel .mui-btn--danger {
+        background-color: #f44336;
+    }
+}
+
+
+
+/* RESPONSIVE */
+
+@media all and (min-width: 930px) {
+    #container {
+        margin: auto;
+        margin-top: 80px;
+        max-width: 840px;
+    }
+}
+@media all and (max-width: 930px) {
+    #container {
+        margin-top: 20px;
+    }
+}

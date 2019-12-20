@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Demo-2</title>
+    <link href="libs/mui.min.css" rel="stylesheet" />
+    <script src="libs/mui.min.js"></script>
+    <script src="libs/angular.min.js"></script>
+    <script src="../src/angular-jstore.js"></script>
+    <link href="demo.css" rel="stylesheet" />
+    <script src="demo2.js"></script>
+</head>
+<body ng-app="myAppDemo">
+    <div id="container" class="mui-container" ng-controller="Demo2Ctrl">
+        <div class="mui-container-fluid">
+            <div class="mui-row">
+                <div class="mui-col-sm-12">
+                    <h1>Broadcast - Channel</h1>
+
+                    <div class="mui-panel">
+                        <form class="mui-form">
+                            <div class="mui-row">
+                                <div class="mui-col-xs-7">
+                                    <p>Test these buttons on multiple tabs.</p>
+
+                                    <section class="buttons">
+                                        <button type="button" id="btn-logonoff" ng-click="fireLogOnOff();" class="mui-btn mui-btn--small mui-btn--raised mui-btn--primary">
+                                            <span>Login</span>
+                                        </button>
+
+                                        <button type="button" id="btn-purchase" ng-click="firePurchase();" class="mui-btn mui-btn--small mui-btn--raised mui-btn--success">
+                                            <span>Purchase</span>
+                                        </button>
+
+                                        <button type="button" id="btn-reload" ng-click="fireReload();" class="mui-btn mui-btn--small mui-btn--raised mui-btn--accent">
+                                            <span>Reload</span>
+                                        </button>
+                                    </section>
+                                </div>
+
+                                <div class="mui-col-xs-5">
+                                    <p>Event log:</p>
+                                    <section class="console">
+                                        <code id="console"></code>
+                                    </section>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
