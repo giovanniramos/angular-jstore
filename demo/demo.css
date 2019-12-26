@@ -33,7 +33,7 @@ html {
 }
 
 
-#container section.console {
+#container section.box {
     background: #fff;
     border-top: 1px solid #a8a6a2;
     border-bottom: 1px solid #a8a6a2;
@@ -48,9 +48,14 @@ html {
     overflow: auto;
 }
 
-#container section.console code > p {
+#container section.box code > p {
     margin-bottom: 0;
 }
+
+#container section.box pre {
+    margin: 0;
+}
+
 
 
 

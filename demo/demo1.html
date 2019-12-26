@@ -20,7 +20,20 @@
                     <h1>LocalStorage</h1>
 
                     <div class="mui-panel">
-                        ...Check your console
+                        <form class="mui-form">
+                            <div class="mui-row">
+                                <div class="mui-col-xs-7">
+                                    <p>Check the result in the browser console and also see the source code of <strong>demo1.js</strong> and <strong>demo1.html</strong> to understand the operations performed.</p>
+                                </div>
+
+                                <div class="mui-col-xs-5">
+                                    <p>Data from localStorage:</p>
+                                    <section class="box">
+                                        <pre>{{ localStorageData | json }}</pre>
+                                    </section>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -1,9 +1,10 @@
+/*jshint strict:false, newcap:false */
 
 var app = angular.module('myAppDemo', ['angular-jstore']);
 
 // JStore provider
 app.config(['$jstoreProvider', function ($jstoreProvider) {
-    $jstoreProvider.setDebug(false);
+    //$jstoreProvider.setDebug(true);
     $jstoreProvider.setTabStatus(true);
 }]);
 
@@ -12,8 +13,9 @@ app.provider('$tools', [function $toolsProvider() {
     this.$get = function () {
         return {
             pad: function (x, n) {
-                while (x.toString().length < n)
+                while (x.toString().length < n) {
                     x = '0'+x;
+                }
                 return x;
             },
             now: function () {
@@ -28,7 +30,7 @@ app.provider('$tools', [function $toolsProvider() {
             log: function (str) {
                 var now = this.now();
                 var row = document.createElement('p');
-                var log = document.querySelector('#console');
+                var log = document.querySelector('#log');
                 row.appendChild(document.createTextNode(now + ' - ' + str));
                 log.insertBefore(row, log.childNodes[0] || null);
             }
@@ -43,7 +45,7 @@ app.controller('Demo2Ctrl', ['$scope', '$window', '$tools', '$jstore', function(
 
     // Check browser support for localStorage
     if (!$jstore.isSupported) {
-        alert('Your browser does not support HTML5 Web Storage. Please upgrade to a modern browser.');
+        $window.alert('Your browser does not support HTML5 Web Storage. Please upgrade to a modern browser.');
         angular.element('body').empty();
         return;
     }
@@ -58,11 +60,12 @@ app.controller('Demo2Ctrl', ['$scope', '$window', '$tools', '$jstore', function(
         $tools.log('Reload in 3 seconds');
     };
 
-    var Purchase = function () {
-        if (!$jstore.check('purchase'))
+    var BuyNow = function () {
+        if (!$jstore.check('buynow')) {
             return;
+        }
 
-        var btn = document.querySelector('#btn-purchase');
+        var btn = document.querySelector('#btn-buynow');
         btn.setAttribute('disabled', 'disabled');
 
         setTimeout(function() {
@@ -73,7 +76,7 @@ app.controller('Demo2Ctrl', ['$scope', '$window', '$tools', '$jstore', function(
 
             btn.removeAttribute('disabled');
 
-            $jstore.close('purchase');
+            $jstore.close('buynow');
         }, 3000);
 
         $tools.log('Purchase made!');
@@ -104,11 +107,11 @@ app.controller('Demo2Ctrl', ['$scope', '$window', '$tools', '$jstore', function(
         Reload();
     });
 
-    $jstore.watch('purchase', function (ev) {
-        Purchase();
+    $jstore.watch('buynow', function () {
+        BuyNow();
     });
 
-    $jstore.watch('logonoff', function (ev) {
+    $jstore.watch('logonoff', function () {
         LogOnOff();
     });
 
@@ -124,9 +127,9 @@ app.controller('Demo2Ctrl', ['$scope', '$window', '$tools', '$jstore', function(
         $jstore.fire({ command: 'logonoff' });
     };
 
-    vm.firePurchase = function () {
-        Purchase();
-        $jstore.fire({ command: 'purchase' });
+    vm.fireBuyNow = function () {
+        BuyNow();
+        $jstore.fire({ command: 'buynow' });
     };
 
 }]);
