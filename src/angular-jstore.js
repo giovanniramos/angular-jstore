@@ -1,4 +1,6 @@
 ; (function(root, factory) {
+    'use strict';
+
     if (typeof define === 'function' && define.amd) {
         // AMD module
         define(['angular'], factory);
@@ -11,7 +13,7 @@
         factory(root.angular);
     }
 } (this, function(angular) {
-    "use strict";
+    'use strict';
 
     /**
      * @ngdoc overview
@@ -28,7 +30,7 @@
     jstore.provider('$jstore', function $jstoreProvider() {
 
         // Default values
-        var _prefix = 'jstoreApp-';
+        var _prefix = 'jStoreApp-';
         var _channel = [];
         var _debug = false;
         var _tabStatus = false;
@@ -36,8 +38,9 @@
         // Setter for the prefix
         // e.g. $jstoreProvider.setPrefix('myAppName');
         this.setPrefix = function(value) {
-            if (typeof value !== 'string')
+            if (typeof value !== 'string'){
                 throw new TypeError('$jstoreProvider.setPrefix() expects a String.');
+            }
 
             _prefix = value;
             return this;
@@ -46,8 +49,9 @@
         // Setter to enable debugging
         // e.g. $jstoreProvider.setDebug(true);
         this.setDebug = function(value) {
-            if (typeof value !== 'boolean')
+            if (typeof value !== 'boolean') {
                 throw new TypeError('$jstoreProvider.setDebug() expects a Boolean.');
+            }
 
             _debug = value;
             return this;
@@ -56,8 +60,9 @@
         // Setter to apply inactive state on tabs
         // e.g. $jstoreProvider.setTabStatus(true);
         this.setTabStatus = function(value) {
-            if (typeof value !== 'boolean')
+            if (typeof value !== 'boolean') {
                 throw new TypeError('$jstoreProvider.setTabStatus() expects a Boolean.');
+            }
 
             _tabStatus = value;
             return this;
@@ -73,12 +78,11 @@
          * ```js
          * angular.module('appExample', ['angular-jstore'])
          *   .controller('ExampleController', ['$jstore', function($jstore) {
-         *     // Session name
-         *     var SESSION_NAME = "MyYourSessionName";
-         *     // Add data in session localStorage
-         *     $jstore.set(SESSION_NAME, { year: "2017" });
-         *     // Recover data from session
-         *     var data = $jstore.get(SESSION_NAME);
+         *
+         *     var SESSION_NAME = "MySessionName";              // Session name
+         *     $jstore.set(SESSION_NAME, { year: "2017" });     // Add data to session localStorage
+         *     var data = $jstore.get(SESSION_NAME);            // Recover data from session
+         *
          *   }]);
          * ```
          */
@@ -86,12 +90,29 @@
 
             // Check browser support
             var _checkBrowserSupport = function() {
-                return (typeof (Storage) !== "undefined") ? true : false;
+                return (typeof (Storage) !== 'undefined') ? true : false;
             };
 
             // Reduce prefix
             var _reducePrefix = function(id) {
                 return id.replace(new RegExp('(' + _prefix + '){2,}', 'g'), _prefix);
+            };
+
+            // Triggers the command that is listening to the channel
+            var _fireCommand = function(evt) {
+                angular.forEach(_channel, function(v) {
+                    if (v[0] === evt.newValue) {
+                        if (_debug) {
+                            window.console.log(' fire >>', v[0]);
+                        }
+
+                        if (_tabStatus) {
+                            top.document.title = top.document.title.replace(/\(inactive\)/,'') + ' (inactive)';
+                        }
+
+                        v[1](evt);
+                    }
+                });
             };
 
             return {
@@ -127,10 +148,10 @@
                         throw new TypeError('$jstore.set() expects a JSON object as the second argument.');
                     }
 
-                    var pid = _prefix + sId;
-                    var obj = this.get(pid);
+                    var pId = _prefix + sId;
+                    var obj = this.get(pId);
 
-                    return localStorage.setItem(pid, angular.toJson(obj == null ? val : angular.merge(obj, val)));
+                    return localStorage.setItem(pId, angular.toJson(obj === null ? val : angular.merge(obj, val)));
                 },
 
                 /**
@@ -148,8 +169,8 @@
                         throw new TypeError('$jstore.get() expects a String.');
                     }
 
-                    var pid = _reducePrefix(_prefix + sId);
-                    var val = localStorage.getItem(pid);
+                    var pId = _reducePrefix(_prefix + sId);
+                    var val = localStorage.getItem(pId);
 
                     return (val !== null) ? angular.fromJson(val) : null;
                 },
@@ -169,20 +190,21 @@
                         throw new TypeError('$jstore.del() expects a String.');
                     }
 
-                    var pid = _reducePrefix(_prefix + sId);
-                    var obj = this.get(pid);
-                    if (obj == null)
+                    var pId = _reducePrefix(_prefix + sId);
+                    var obj = this.get(pId);
+                    if (obj === null) {
                         return;
+                    }
 
                     var args = arguments;
                     if (args.length) {
                         var argsLength = args.length;
-                        for (var i = 1; i < argsLength; i++) {
+                        for (var i = 1; i < argsLength; i += 1) {
                             delete obj[args[i]];
                         }
                     }
 
-                    localStorage.setItem(pid, angular.toJson(obj));
+                    localStorage.setItem(pId, angular.toJson(obj));
                 },
 
                 /**
@@ -200,19 +222,20 @@
                         throw new TypeError('$jstore.omit() expects a String.');
                     }
 
-                    var pid = _reducePrefix(_prefix + sId);
-                    var obj = this.get(pid);
-                    if (obj == null)
+                    var pId = _reducePrefix(_prefix + sId);
+                    var obj = this.get(pId);
+                    if (obj === null) {
                         return;
+                    }
 
                     var nObj = {};
                     var args = arguments;
                     if (args.length) {
                         var argsLength = args.length;
-                        for (var i = 1; i < argsLength; i++) {
+                        for (var i = 1; i < argsLength; i += 1) {
                             for (var key in obj) {
                                 if (obj.hasOwnProperty(key)) {
-                                    if (key == args[i]) {
+                                    if (key === args[i]) {
                                         nObj[key] = obj[key];
                                     }
                                 }
@@ -220,7 +243,7 @@
                         }
                     }
 
-                    localStorage.setItem(pid, angular.toJson(nObj));
+                    localStorage.setItem(pId, angular.toJson(nObj));
                 },
 
                 /**
@@ -254,9 +277,9 @@
                     var count = 0;
                     var store = localStorage;
                     var storeLength = store.length;
-                    for (var i = 0; i < storeLength; i++) {
+                    for (var i = 0; i < storeLength; i += 1) {
                         if (store.key(i).indexOf(_prefix) === 0) {
-                            count++;
+                            count += 1;
                         }
                     }
 
@@ -273,12 +296,13 @@
                  * @param {Function} callback The callback function.
                  */
                 each: function(callback) {
-                    if (typeof callback !== 'function')
+                    if (typeof callback !== 'function') {
                         throw new TypeError('$jstore.each() expects a Function with callback.');
+                    }
 
                     var store = localStorage;
                     var storeLength = store.length;
-                    for (var i = 0; i < storeLength; i++) {
+                    for (var i = 0; i < storeLength; i += 1) {
                         var id = localStorage.key(i);
                         if (store.key(i).indexOf(_prefix) === 0) {
                             callback(id, this.get(id));
@@ -303,7 +327,7 @@
                     }
 
                     if (_debug) {
-                        console.log('fired >>', obj.command);
+                        window.console.log('fired >>', obj.command);
                     }
 
                     if (_tabStatus) {
@@ -312,29 +336,6 @@
 
                     localStorage.setItem('cmd', obj.command);
                     localStorage.removeItem('cmd');
-                },
-
-                /**
-                 * @ngdoc method
-                 * @name $jstore#fired
-                 *
-                 * @description
-                 * Fires the corresponding command listening to the channel.
-                 */
-                fired: function(evt) {
-                    angular.forEach(_channel, function(v, k) {
-                        if (v[0] == evt.newValue) {
-                            if (_debug) {
-                                console.log(' fire >>', v[0]);
-                            }
-
-                            if (_tabStatus) {
-                                top.document.title = top.document.title.replace(/\(inactive\)/,'') + ' (inactive)';
-                            }
-
-                            v[1](evt);
-                        }
-                    });
                 },
 
                 /**
@@ -354,16 +355,16 @@
                     }
 
                     if (_debug) {
-                        console.log('watch >>', cmd);
+                        window.console.log('watch >>', cmd);
                     }
 
                     _channel.push([cmd, callback]);
 
                     // Verify support for IE < 9
                     if (window.addEventListener) {
-                        window.addEventListener('storage', this.fired, false);
+                        window.addEventListener('storage', _fireCommand, false);
                     } else if (window.attachEvent) {
-                        window.attachEvent('onstorage', this.fired);
+                        window.attachEvent('onstorage', _fireCommand);
                     }
                 },
 
@@ -380,13 +381,13 @@
                     }
 
                     if (_debug) {
-                        console.log('check >>', cmd);
+                        window.console.log('check >>', cmd);
                     }
 
                     var active = false;
 
                     _channel.filter(function (v) {
-                        if (v[0] == cmd) {
+                        if (v[0] === cmd) {
                             active = true;
                         }
                     });
@@ -407,7 +408,7 @@
                     }
 
                     if (_debug) {
-                        console.log('close >>', cmd);
+                        window.console.log('close >>', cmd);
                     }
 
                     _channel = _channel.filter(function (v) {
@@ -425,12 +426,12 @@
                  * @param {string} sId Id name of the session to be removed.
                  */
                 remove: function(sId) {
-                    if (typeof sId !== 'string') {
-                        throw new TypeError('$jstore.remove() expects a String.');
+                    if (typeof sId === 'string') {
+                        var pId = _reducePrefix(_prefix + sId);
+                        localStorage.removeItem(pId);
+                    } else {
+                        localStorage.clear();
                     }
-
-                    var pid = _reducePrefix(_prefix + sId);
-                    localStorage.removeItem(pid);
                 },
 
                 /**
@@ -439,9 +440,12 @@
                  *
                  * @description
                  * Clear all sessions in localStorage.
+                 *
+                 * @deprecated
+                 * Since version 1.1.5
                  */
                 clear: function() {
-                    localStorage.clear();
+                    throw new TypeError('Use $jstore.remove() to delete all sessions created in localStorage.');
                 }
             };
         }];
