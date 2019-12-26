@@ -4,6 +4,8 @@ The `angular-jstore` module provides a convenient wrapper for to storing JSON ob
 
 And now it has Broadcast Channel support for sending data between different browser tabs.
 
+For testing see pages [demo1](https://htmlpreview.github.io/?https://github.com/giovanniramos/angular-jstore/blob/master/demo/demo1.html) and [demo2](https://htmlpreview.github.io/?https://github.com/giovanniramos/angular-jstore/blob/master/demo/demo2.html).
+
 
 ## Install with package managers
 
