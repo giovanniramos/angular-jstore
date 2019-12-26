@@ -1,0 +1,29 @@
+{
+    "bitwise"       : true,
+    "camelcase"     : true,
+    "curly"         : true,
+    "eqeqeq"        : true,
+    "forin"         : true,
+    "freeze"        : true,
+    "immed"         : true,
+    "latedef"       : true,
+    "newcap"        : true,
+    "noarg"         : true,
+    "noempty"       : true,
+    "nonbsp"        : true,
+    "nonew"         : true,
+    "plusplus"      : true,
+    "quotmark"      : "single",
+    "undef"         : true,
+    "unused"        : "strict",
+    "strict"        : true,
+    "shadow"        : true,
+    "browser"       : true,
+    "node"          : false,
+    "globals"       : {
+        "angular"   : true,
+        "module"    : true,
+        "require"   : true,
+        "define"    : true
+    }
+}
