@@ -9,13 +9,17 @@ For testing see pages [demo1](https://htmlpreview.github.io/?https://github.com/
 
 ## Install with package managers
 
+#### via npm:
+```
+$ npm install angular-jstore --save
+```
 #### via bower:
 ```
 $ bower install angular-jstore --save
 ```
-#### via npm:
+#### via yarn:
 ```
-$ npm install angular-jstore --save
+$ yarn add angular-jstore
 ```
 
 
